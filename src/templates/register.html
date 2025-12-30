@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>教师注册</h1>
+        <form action="/register" method="post">
+            <label for="工号">工号：</label>
+            <input type="text" id="工号" name="工号" required><br><br>
+            <label for="姓名">姓名：</label>
+            <input type="text" id="姓名" name="姓名" required><br><br>
+            <label for="密码">密码：</label>
+            <input type="password" id="密码" name="密码" required><br><br>
+            <label for="性别">性别：</label>
+            <select name="性别" id="性别">
+                <option value="1">男</option>
+                <option value="2">女</option>
+            </select><br><br>
+            <label for="职称">职称：</label>
+            <select name="职称" id="职称">
+                <option value="1">博士后</option>
+                <option value="2">助教</option>
+                <option value="3">讲师</option>
+                <option value="4">副教授</option>
+                <option value="5">特任教授</option>
+                <option value="6">教授</option>
+                <option value="7">助理研究员</option>
+                <option value="8">特任副研究员</option>
+                <option value="9">副研究员</option>
+                <option value="10">特任研究员</option>
+                <option value="11">研究员</option>
+            </select><br><br>
+            <button type="submit">完成</button>
+        </form>
+    </div>
+</body>
+</html>

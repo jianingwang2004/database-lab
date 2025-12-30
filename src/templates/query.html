@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查询统计</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>查询统计</h1>
+        <form action="/query" method="post">
+            <label for="工号">工号：</label>
+            <input type="text" id="工号" name="工号" required><br><br>
+            <label for="开始年份">开始年份：</label>
+            <input type="number" id="开始年份" name="开始年份" required><br><br>
+            <label for="结束年份">结束年份：</label>
+            <input type="number" id="结束年份" name="结束年份" required><br><br>
+            <button type="submit">查询并生成报告</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编辑课程</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>编辑课程</h1>
+        <form action="{{ url_for('edit_course', course_id=course.课程号, year=taught_course.年份, term=taught_course.学期) }}" method="post">
+            <label for="课程号">课程号：</label>
+            <input type="text" id="课程号" name="课程号" value="{{ course.课程号 }}" readonly><br><br>
+            
+            <label for="课程名称">课程名称：</label>
+            <input type="text" id="课程名称" name="课程名称" value="{{ course.课程名称 }}" required><br><br>
+            
+            <label for="学期">学期：</label>
+            <select name="学期" id="学期">
+                <option value="1" {% if taught_course.学期 == 1 %}selected{% endif %}>春季学期</option>
+                <option value="2" {% if taught_course.学期 == 2 %}selected{% endif %}>夏季学期</option>
+                <option value="3" {% if taught_course.学期 == 3 %}selected{% endif %}>秋季学期</option>
+            </select><br><br>
+            
+            <label for="承担学时">承担学时：</label>
+            <input type="number" id="承担学时" name="承担学时" min="1" value="{{ taught_course.承担学时 }}" required><br><br>
+            
+            <label for="课程性质">课程性质：</label>
+            <select name="课程性质" id="课程性质">
+                <option value="1" {% if course.课程性质 == 1 %}selected{% endif %}>本科生课程</option>
+                <option value="2" {% if course.课程性质 == 2 %}selected{% endif %}>研究生课程</option>
+            </select><br><br>
+            
+            <label for="年份">年份：</label>
+            <input type="number" id="年份" name="年份" min="2000" max="2100" value="{{ taught_course.年份 }}" readonly><br><br>
+            
+            <button type="submit">更新</button>
+            <a href="{{ url_for('add_course') }}"><button type="button">取消</button></a>
+        </form>
+    </div>
+</body>
+</html>

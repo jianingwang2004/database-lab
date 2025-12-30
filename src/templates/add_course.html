@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登记课程</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+        form {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>登记课程</h1>
+        <form action="/add_course" method="post">
+            <label for="课程号">课程号：</label>
+            <input type="text" id="课程号" name="课程号" required><br><br>
+            
+            <label for="课程名称">课程名称：</label>
+            <input type="text" id="课程名称" name="课程名称" required><br><br>
+            
+            <label for="学期">学期：</label>
+            <select name="学期" id="学期">
+                <option value="1">春季学期</option>
+                <option value="2">夏季学期</option>
+                <option value="3">秋季学期</option>
+            </select><br><br>
+            
+            <label for="承担学时">承担学时：</label>
+            <input type="number" id="承担学时" name="承担学时" min="1" required><br><br>
+            
+            <label for="课程性质">课程性质：</label>
+            <select name="课程性质" id="课程性质">
+                <option value="1">本科生课程</option>
+                <option value="2">研究生课程</option>
+            </select><br><br>
+            
+            <label for="年份">年份：</label>
+            <input type="number" id="年份" name="年份" min="2000" max="2100" required><br><br>
+            
+            <button type="submit">提交</button>
+        </form>
+        
+        <h2>我的课程列表</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>课程号</th>
+                    <th>课程名称</th>
+                    <th>年份</th>
+                    <th>学期</th>
+                    <th>承担学时</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course, taught in courses %}
+                <tr>
+                    <td>{{ course.课程号 }}</td>
+                    <td>{{ course.课程名称 }}</td>
+                    <td>{{ taught.年份 }}</td>
+                    <td>
+                        {% if taught.学期 == 1 %}春季学期{% endif %}
+                        {% if taught.学期 == 2 %}夏季学期{% endif %}
+                        {% if taught.学期 == 3 %}秋季学期{% endif %}
+                    </td>
+                    <td>{{ taught.承担学时 }}</td>
+                    <td class="actions">
+                        <a href="{{ url_for('edit_course', course_id=course.课程号, year=taught.年份, term=taught.学期) }}">
+                            <button class="btn btn-edit">修改</button>
+                        </a>
+                        <form action="{{ url_for('delete_course', course_id=course.课程号, year=taught.年份, term=taught.学期) }}" method="post" class="inline-form">
+                            <button type="submit" class="btn btn-delete" onclick="return confirm('确定删除此课程？')">删除</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6">暂无课程记录</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/index">返回首页</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登记论文</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+        form {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .important {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>登记论文</h1>
+        <form action="/add_paper" method="post">
+            <label for="序号" class="important">论文序号：</label>
+            <input type="number" id="序号" name="序号" min="1" required><br>
+            <small class="important">注意：同一论文所有作者使用相同序号</small><br><br>
+            
+            <label for="论文名称">论文名称：</label>
+            <input type="text" id="论文名称" name="论文名称" required><br><br>
+            
+            <label for="发表源">发表源：</label>
+            <input type="text" id="发表源" name="发表源" required><br><br>
+            
+            <label for="发表年份">发表年份：</label>
+            <input type="date" id="发表年份" name="发表年份" required><br><br>
+            
+            <label for="类型">论文类型：</label>
+            <select name="类型" id="类型">
+                <option value="1">Full Paper</option>
+                <option value="2">Short Paper</option>
+                <option value="3">Poster Paper</option>
+                <option value="4">Demo Paper</option>
+            </select><br><br>
+            
+            <label for="级别">论文级别：</label>
+            <select name="级别" id="级别">
+                <option value="1">CCF-A</option>
+                <option value="2">CCF-B</option>
+                <option value="3">CCF-C</option>
+                <option value="4">中文 CCF-A</option>
+                <option value="5">中文 CCF-B</option>
+                <option value="6">无级别</option>
+            </select><br><br>
+            
+            <label for="排名" class="important">排名：</label>
+            <input type="number" id="排名" name="排名" min="1" required><br>
+            <small class="important">同一论文中排名不能重复</small><br><br>
+            
+            <label for="是否通讯作者" class="important">是否通讯作者：</label>
+            <input type="checkbox" id="是否通讯作者" name="是否通讯作者"><br>
+            <small class="important">一篇论文只能有一位通讯作者</small><br><br>
+            
+            <button type="submit">提交</button>
+        </form>
+        
+        <h2>我的论文列表</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>论文名称</th>
+                    <th>发表源</th>
+                    <th>发表年份</th>
+                    <th>排名</th>
+                    <th>通讯作者</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for paper, published in papers %}
+                <tr>
+                    <td>{{ paper.序号 }}</td>
+                    <td>{{ paper.论文名称 }}</td>
+                    <td>{{ paper.发表源 }}</td>
+                    <td>{{ paper.发表年份.year }}</td>
+                    <td>{{ published.排名 }}</td>
+                    <td>{{ '是' if published.是否通讯作者 else '否' }}</td>
+                    <td class="actions">
+                        <a href="{{ url_for('edit_paper', paper_id=paper.序号) }}">
+                            <button class="btn btn-edit">修改</button>
+                        </a>
+                        <form action="{{ url_for('delete_paper', paper_id=paper.序号) }}" method="post" class="inline-form">
+                            <button type="submit" class="btn btn-delete" onclick="return confirm('确定删除此论文？')">删除</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7">暂无论文记录</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/index">返回首页</a>
+    </div>
+</body>
+</html>

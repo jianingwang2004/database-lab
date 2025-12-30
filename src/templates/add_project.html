@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登记项目</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+        form {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .important {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>登记项目</h1>
+        <form action="/add_project" method="post">
+            <label for="项目号">项目号：</label>
+            <input type="text" id="项目号" name="项目号" required><br><br>
+            
+            <label for="项目名称">项目名称：</label>
+            <input type="text" id="项目名称" name="项目名称" required><br><br>
+            
+            <label for="项目来源">项目来源：</label>
+            <input type="text" id="项目来源" name="项目来源" required><br><br>
+            
+            <label for="项目类型">项目类型：</label>
+            <select name="项目类型" id="项目类型">
+                <option value="1">国家级项目</option>
+                <option value="2">省部级项目</option>
+                <option value="3">市厅级项目</option>
+                <option value="4">企业合作项目</option>
+                <option value="5">其他类型项目</option>
+            </select><br><br>
+            
+            <label for="承担经费">承担经费：</label>
+            <input type="number" id="承担经费" name="承担经费" step="0.01" required><br><br>
+            
+            <label for="开始年份">开始年份：</label>
+            <input type="number" id="开始年份" name="开始年份" required><br><br>
+            
+            <label for="结束年份">结束年份：</label>
+            <input type="number" id="结束年份" name="结束年份" required><br><br>
+            
+            <label for="排名" class="important">排名：</label>
+            <input type="number" id="排名" name="排名" min="1" required><br>
+            <small class="important">同一项目中排名不能重复</small><br><br>
+            
+            <button type="submit">提交</button>
+        </form>
+        
+        <h2>我的项目列表</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>项目号</th>
+                    <th>项目名称</th>
+                    <th>项目来源</th>
+                    <th>总经费</th>
+                    <th>承担经费</th>
+                    <th>排名</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for project, undertaken in projects %}
+                <tr>
+                    <td>{{ project.项目号 }}</td>
+                    <td>{{ project.项目名称 }}</td>
+                    <td>{{ project.项目来源 }}</td>
+                    <td>{{ project.总经费 }}</td>
+                    <td>{{ undertaken.承担经费 }}</td>
+                    <td>{{ undertaken.排名 }}</td>
+                    <td class="actions">
+                        <a href="{{ url_for('edit_project', project_id=project.项目号) }}">
+                            <button class="btn btn-edit">修改</button>
+                        </a>
+                        <form action="{{ url_for('delete_project', project_id=project.项目号) }}" method="post" class="inline-form">
+                            <button type="submit" class="btn btn-delete" onclick="return confirm('确定删除此项目？')">删除</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7">暂无项目记录</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/index">返回首页</a>
+    </div>
+</body>
+</html>
